@@ -1,5 +1,7 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import cookieParser from 'cookie-parser';
+
 import { User } from '../models/User.js'
 
 const users=[]
@@ -39,7 +41,14 @@ export async function login(req,res){
 
         const token=jwt.sign({username:username},"afdfds",{expiresIn:"1h"})
         console.log(token)
-        res.json({token});
+         res.cookie("jwt", token, {
+            httpOnly: true,              
+            sameSite: "lax",           
+            maxAge: 60 * 60 * 1000        
+        });
+
+        res.status(200).json({ message: "Login successful" });
+
 
     }
    catch(err){
@@ -47,3 +56,12 @@ export async function login(req,res){
 
    } 
 }
+
+
+export const verify = (req, res) => {
+
+  res.status(200).json({
+    user: req.user
+  });
+
+};
