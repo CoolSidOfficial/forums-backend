@@ -11,7 +11,7 @@ connectDB()
 
 const app=express()
 
-process.env.PORT || 4000
+const PORT=process.env.PORT || 4000
 app.use(cookieParser());
 app.use(cors({
   origin: true,
