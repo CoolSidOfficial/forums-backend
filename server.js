@@ -14,7 +14,10 @@ const app=express()
 const PORT=4000
 app.use(cookieParser());
 app.use(cors({
-  origin: true,
+  origin: [
+    "http://localhost:3000",
+    "https://forums-self.vercel.app"
+  ],
   credentials: true
 }))
 app.use(express.json())
