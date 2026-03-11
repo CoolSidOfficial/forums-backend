@@ -42,7 +42,7 @@ export async function login(req,res){
         const token=jwt.sign({username:username},"afdfds",{expiresIn:"1h"})
          res.cookie("jwt", token, {
             httpOnly: true,              
-            sameSite: "lax",           
+            sameSite: "none",           
             maxAge: 60 * 60 * 1000        
         });
         
