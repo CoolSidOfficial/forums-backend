@@ -1,6 +1,8 @@
 import cors from 'cors'
 import express from "express"
 import authroutes from './routes/auth.js'
+import postRoutes from "./routes/postRoutes.js";
+
 import connectDB from './db.js'
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
@@ -26,6 +28,7 @@ app.use(express.urlencoded({extended:true}))
 
 
 app.use("/auth",authroutes)
+app.use("/api",postRoutes)
 
 app.get("/",(req,res)=>{
     res.send("forums backend is active")

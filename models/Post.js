@@ -1,10 +1,11 @@
-
 import mongoose from "mongoose";
-
 const PostSchema = new mongoose.Schema({
-  title: String,
-  content: String,
-  author: String,
+    title: String,
+    author: String,
+    content: String,
+    category: String, 
 }, { timestamps: true });
 
-export default mongoose.model("Post", PostSchema);
+
+ const Post = mongoose.model("Post", PostSchema);
+export default Post; 
