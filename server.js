@@ -16,7 +16,7 @@ const app=express()
 const PORT=process.env.PORT || 4000
 app.use(cookieParser());
 app.use(cors({
-origin: "https://forums-self.vercel.app",
+origin: ["https://forums-self.vercel.app","http://localhost:3000"],
 
   credentials: true
 }));
