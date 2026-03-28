@@ -43,23 +43,17 @@ export async function login(req, res) {
   try {
     const { username, password } = req.body;
 
-    // allow login with username OR email
     const user = await User.findOne({
       $or: [{ username }, { email: username }],
     });
 
     if (!user) {
-      return res.status(400).json({
-        message: "User doesn't exist, please signup",
-      });
+      return res.status(400).json({ message: "User doesn't exist, please signup" });
     }
 
     const match = await bcrypt.compare(password, user.password);
-
     if (!match) {
-      return res.status(401).json({
-        message: "Wrong password",
-      });
+      return res.status(401).json({ message: "Wrong password" });
     }
 
     const token = jwt.sign(
@@ -68,24 +62,17 @@ export async function login(req, res) {
       { expiresIn: "1h" }
     );
 
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      sameSite: "lax", // change from "none"
-      secure: false,   // change from true
-      maxAge: 60 * 60 * 1000,
-    });
-
+    // ✅ Send token in response body instead of cookie
     res.status(200).json({
       message: "Login successful",
+      token,
     });
+
   } catch (err) {
-    res.status(500).json({
-      message: "Login failed",
-      error: err.message,
-    });
+    console.error("LOGIN ERROR:", err);
+    res.status(500).json({ message: "Login failed", error: err.message });
   }
 }
-
 export const verify = (req, res) => {
   res.status(200).json({
     user: req.user,
