@@ -67,10 +67,7 @@ export const getTrendingPosts = async (req, res) => {
 
     const posts = await Post.find()
       .sort({
-        likes: -1,
-        commentsCount: -1,
-        views: -1,
-        createdAt: -1,
+        createdAt: -1
       })
       .limit(10);
 
