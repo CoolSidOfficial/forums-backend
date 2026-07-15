@@ -1,4 +1,3 @@
-
 import Post from "../models/Post.js";
 
 export const createPost = async (req, res) => {
@@ -31,10 +30,31 @@ export const getPostsByCategory = async (req, res) => {
 
         const posts = await Post.find({
             category: { $regex: new RegExp(`^${category}$`, "i") }
-        });
+        }).sort({ createdAt: -1 }); // newest first
 
         res.json(posts);
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+};
+
+// NEW
+export const getPostById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const post = await Post.findById(id);
+
+        if (!post) {
+            return res.status(404).json({
+                message: "Post not found"
+            });
+        }
+
+        res.json(post);
+    } catch (err) {
+        res.status(500).json({
+            error: err.message
+        });
     }
 };
