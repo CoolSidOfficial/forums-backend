@@ -6,6 +6,7 @@ import postRoutes from "./routes/postRoutes.js";
 import connectDB from './db.js'
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
+import productRoutes from "./routes/productRoutes.js";
 
 
 dotenv.config();
@@ -29,7 +30,7 @@ app.use(express.urlencoded({extended:true}))
 
 app.use("/auth",authroutes)
 app.use("/api",postRoutes)
-
+app.use("/api/product", productRoutes);
 app.get("/",(req,res)=>{
     res.send("forums backend is active")
 })
