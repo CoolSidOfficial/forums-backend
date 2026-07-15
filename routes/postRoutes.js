@@ -2,7 +2,8 @@
 import express from "express";
 import {
     createPost,
-    getPostsByCategory
+    getPostsByCategory,
+    getPostById,
 } from "../controllers/PostController.js";
 
 const router = express.Router();
