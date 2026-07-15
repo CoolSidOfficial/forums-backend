@@ -27,7 +27,7 @@ export const createProductDiscussion = async (req, res) => {
       });
     }
 
-    // Check if discussion already exists
+    // Check if product discussion already exists
     let product = await Product.findOne({ asin });
 
     if (product) {
@@ -38,7 +38,7 @@ export const createProductDiscussion = async (req, res) => {
       });
     }
 
-    // Fetch product from RapidAPI
+    // Fetch product details from RapidAPI
     const response = await axios.get(
       "https://amazon-online-data-api.p.rapidapi.com/product",
       {
@@ -63,6 +63,25 @@ export const createProductDiscussion = async (req, res) => {
 
     const data = results[0];
 
+    // Get first image safely
+    let image = "";
+
+    if (Array.isArray(data.product_images) && data.product_images.length > 0) {
+      const firstImage = data.product_images[0];
+
+      if (typeof firstImage === "string") {
+        image = firstImage;
+      } else {
+        image =
+          firstImage.link ||
+          firstImage.large ||
+          firstImage.hi_res ||
+          firstImage.image ||
+          "";
+      }
+    }
+
+    // Create new discussion
     product = await Product.create({
       asin,
       slug: asin.toLowerCase(),
@@ -71,18 +90,22 @@ export const createProductDiscussion = async (req, res) => {
 
       description: data.description || "",
 
-      image:
-        typeof data.product_images?.[0] === "string"
-          ? data.product_images[0]
-          : data.product_images?.[0]?.link || "",
-
+      image,
       images: data.product_images || [],
 
       price: Number(data.price) || 0,
 
       currency: data.currency || "INR",
 
-      availability: data.availability || "",
+      availability:
+        typeof data.availability === "object"
+          ? data.availability?.message || ""
+          : data.availability || "",
+
+      availabilityType:
+        typeof data.availability === "object"
+          ? data.availability?.type || ""
+          : "",
 
       country: data.country || "IN",
 
