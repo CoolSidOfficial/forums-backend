@@ -8,8 +8,7 @@ const PostSchema = new mongoose.Schema(
     },
 
     author: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
       required: true,
     },
 
@@ -22,12 +21,25 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    views: {
+      type: Number,
+      default: 0,
+    },
+
+    likes: {
+      type: Number,
+      default: 0,
+    },
+
+    commentsCount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Post = mongoose.model("Post", PostSchema);
-
-export default Post;
+export default mongoose.model("Post", PostSchema);

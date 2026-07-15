@@ -62,3 +62,23 @@ export const getPostById = async (req, res) => {
         });
     }
 };
+export const getTrendingPosts = async (req, res) => {
+  try {
+
+    const posts = await Post.find()
+      .sort({
+        likes: -1,
+        commentsCount: -1,
+        views: -1,
+        createdAt: -1,
+      })
+      .limit(10);
+
+    res.json(posts);
+
+  } catch(err) {
+    res.status(500).json({
+      error: err.message
+    });
+  }
+};
