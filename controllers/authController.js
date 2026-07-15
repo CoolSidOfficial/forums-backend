@@ -77,3 +77,38 @@
       user: req.user,
     });
   };
+  export const updateProfile = async (req, res) => {
+
+  try {
+
+    const userId = req.user.id;
+
+    const { name } = req.body;
+
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        name
+      },
+      {
+        new:true
+      }
+    ).select("-password");
+
+
+    res.json({
+      message:"Profile updated",
+      user
+    });
+
+
+  } catch(error){
+
+    res.status(500).json({
+      message:error.message
+    });
+
+  }
+
+};
