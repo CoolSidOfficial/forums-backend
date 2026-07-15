@@ -62,7 +62,6 @@
         { expiresIn: "1h" }
       );
 
-      // ✅ Send token in response body instead of cookie
       res.status(200).json({
         message: "Login successful",
         token,

@@ -3,15 +3,17 @@ import Post from "../models/Post.js";
 export const createPost = async (req, res) => {
     try {
         const { category } = req.params;
-        const { title, author, content } = req.body;
+        const { title, content } = req.body;
 
         if (!title || !content) {
-            return res.status(400).json({ message: "Missing fields" });
+            return res.status(400).json({
+                message: "Missing fields"
+            });
         }
 
         const newPost = new Post({
             title,
-            author,
+            author: req.user._id,
             content,
             category
         });
@@ -19,11 +21,13 @@ export const createPost = async (req, res) => {
         await newPost.save();
 
         res.status(201).json(newPost);
+
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({
+            error: err.message
+        });
     }
 };
-
 export const getPostsByCategory = async (req, res) => {
     try {
         const { category } = req.params;
