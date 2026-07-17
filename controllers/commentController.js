@@ -44,19 +44,37 @@ export const createComment = async (req, res) => {
     });
   }
 };
-
-// Get all comments for a post
+// Get all comments with replies for a post
 export const getCommentsByPost = async (req, res) => {
   try {
     const { postId } = req.params;
 
+    // Get top-level comments
     const comments = await Comment.find({
       post: postId,
+      parentComment: null,
     }).sort({
       createdAt: 1,
     });
 
-    res.status(200).json(comments);
+    // Attach replies to each comment
+    const commentsWithReplies = await Promise.all(
+      comments.map(async (comment) => {
+        const replies = await Comment.find({
+          parentComment: comment._id,
+        }).sort({
+          createdAt: 1,
+        });
+
+        return {
+          ...comment.toObject(),
+          replies,
+        };
+      })
+    );
+
+    res.status(200).json(commentsWithReplies);
+
   } catch (err) {
     console.error(err);
 
@@ -66,7 +84,6 @@ export const getCommentsByPost = async (req, res) => {
     });
   }
 };
-
 // Create a reply
 export const createReply = async (req, res) => {
   try {
