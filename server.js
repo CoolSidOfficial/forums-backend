@@ -7,7 +7,7 @@ import connectDB from './db.js'
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
 import productRoutes from "./routes/productRoutes.js";
-
+import commentRoutes from "./routes/commentRoutes.js";
 
 dotenv.config();
 connectDB()
@@ -34,6 +34,7 @@ app.use("/api/product", productRoutes);
 app.get("/",(req,res)=>{
     res.send("forums backend is active")
 })
+app.use("/api", commentRoutes);
 
 
 
